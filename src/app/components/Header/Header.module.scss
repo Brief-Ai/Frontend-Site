@@ -1,0 +1,120 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #101010;
+    padding: 1.25rem 0;
+    width: 100%;
+}
+.logoNameWrapper{
+    // Make image and text inline
+    display: inline-block;
+    // Center the image and text
+    text-align: center;
+
+    margin-left:1.9rem
+}
+
+.logo{
+    // Inline block
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.bizName{
+    display: inline-block;
+    vertical-align: middle;
+    color: #EEE;
+    text-align: center;
+    position: relative;
+    margin-left:9px;
+
+
+    // Font
+    font-family: "Montserrat";
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 37px; /* 102.778% */
+}
+
+// Search Bar Wrapper
+.searchBarWrapper{
+    // Flexbox for alignment
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+
+    // Dimensions
+    width: 931px;   
+    height: 52px;
+
+    // Styling
+    background-color: #000;
+    border-radius: 16px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+
+    // Positioning
+    margin: 0 auto;
+}
+
+// Search Icon
+.searchIcon{
+    // Add any specific styles for the search icon here
+    margin-left: 23.33px;
+}
+
+// Search Bar Input
+.searchBarInput{
+    // No background or border
+    background-color: transparent;
+    border: none;
+
+    // Text color
+    color: #fff;
+
+    //Placeholder color
+    &::placeholder{
+        color: #A5A5A5;
+    }
+
+
+    //Positioning
+    margin-left: 11.5px;
+    
+    // When active no border
+    &:focus{
+        outline: none;
+    }
+}
+
+
+.actionButtonWrapper{
+    display: flex;
+    margin-right: 1.8rem;
+}
+
+.btn{
+    display: flex;
+    height: 52px;
+    border-radius: 8.667px;
+    padding: 0.90rem 17.33px;
+
+    // Font
+    font-family: Inter;
+    font-size: 20.222px;
+    text-align: center;
+    font-weight: 500;
+    line-height: 23.111px; /* 114.286% */
+
+}
+
+.signUpBtn{
+    background-color: #EDEDED;
+    color: #0A0A0A;
+}
+.loginBtn{
+    background-color:#272727 ;
+    color: #EDEDED;
+    margin-left:  1.32rem;
+}

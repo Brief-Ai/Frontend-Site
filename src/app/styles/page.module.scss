@@ -1,3 +1,42 @@
+/* Wrapper styles */
 .wrapper{
     
+}
+
+/* Content Text styles */
+.contentText{
+    /* Font properties */
+    font-family: "Poppins";
+    font-size: 40.96px;
+    font-style: normal;
+    font-weight: 600;
+
+    /* Color properties */
+    color: #DEDEDE;
+
+    /* Line properties */
+    line-height: 23.111px; /* 56.424% */
+
+    // Positioning
+    margin-top: 2.48rem;
+
+    // Center text
+    text-align: center;
+
+    // Text Gradient 1
+    
+}
+
+.gradient1{
+    background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    // color:red
+} 
+
+.gradient2{
+    background: linear-gradient(90deg, #007CF0 0%, #00DFD8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    // color:red
 }

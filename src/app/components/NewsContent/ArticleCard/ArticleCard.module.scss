@@ -1,0 +1,38 @@
+.card {
+    // Section 1: Dimensions
+    width: 372px;
+
+    // Section 2: Padding
+    padding: 0 30px;
+    padding-top: 22px;
+    padding-bottom: 26px;
+
+    // Section 3: Styling
+    background-color: #101010;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 22px;
+}
+
+.newsHeader{
+    font-Family: Poppins;
+    font-Size: 24px;
+    font-Weight: 700;
+
+    
+}
+
+.date{
+    margin-top: 13px;
+    font-Weight: 500;
+    color:#888;
+    font-Family: Poppins;
+    font-Size: 11px;
+}
+
+.content{
+    margin-top: 10px;
+    font-Family: "Poppins";
+    font-Size: 12px;
+    font-Weight: 500;
+    color: #A9A9A9;
+}
