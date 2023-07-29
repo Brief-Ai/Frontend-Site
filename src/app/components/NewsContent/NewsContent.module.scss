@@ -1,3 +1,18 @@
-.wrapper{
-    margin-top: 39px;
-}
+.wrapper {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .articles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 19px;
+  }
+  
+  .article {
+    // background-color: red;
+  }
+  
+  
+  

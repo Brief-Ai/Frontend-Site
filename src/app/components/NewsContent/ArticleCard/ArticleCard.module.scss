@@ -1,3 +1,15 @@
+.cardWrapper{
+    position: relative;
+
+    &:hover{
+        cursor: pointer;
+    }
+ 
+}
+
+
+
+
 .card {
     // Section 1: Dimensions
     width: 372px;
@@ -11,7 +23,66 @@
     background-color: #101010;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
     border-radius: 22px;
+
+    // On hover increase card width
+    transition: all .8s ease-in-out; // adjust timing to your needs
+    &:hover {
+
+    // Background color, gradient
+    background: #1f1f1f;
+
+    transform: scale(1.05);
+ 
+
+    z-index: 5;
+    // Border when hovered
+    border: 1px solid #01DDD9;
+    // If the card is a top article, change border color a gold gradient
+    &.topArticle{
+        // Gold linear gradient border
+        border:2px solid #fff
+    }
+
+    // change color of date
+    .date{
+        transition: all 1.3s ease-in-out; // adjust timing to your needs
+        color: #fff;
+        }
+
+    .image{
+        max-height: 136px;
+        opacity: 1;
+    }
+    }
+
+    
+   
+
+
+    &.topArticle{
+        background: linear-gradient(180deg, #01DDD9 0%, #017EF0 100%);
+    }
+
+    // Change .content class color to white
+    &.topArticle {
+        .content{
+            color: #fff;
+        }
+        .date{
+            color: #fff;
+        }
+        .image{
+            opacity: 1;
+        }
+      
+        // margin-top: 41px;
+    }
+    
+    position: relative;
+    z-index: 2;
 }
+
+
 
 .newsHeader{
     font-Family: Poppins;
@@ -21,18 +92,76 @@
     
 }
 
+
+
+.content{
+    font-Family: "Poppins";
+    font-size: 0.75rem;
+    font-Weight: 500;
+    color: #A9A9A9;
+
+   
+}
+
 .date{
-    margin-top: 13px;
     font-Weight: 500;
     color:#888;
     font-Family: Poppins;
     font-Size: 11px;
+
+    // Margin
+    margin:.8rem 0;
+
+    &.topArticle{
+        color: #fff;
+    }
 }
 
-.content{
-    margin-top: 10px;
-    font-Family: "Poppins";
-    font-Size: 12px;
-    font-Weight: 500;
-    color: #A9A9A9;
+.image{
+    margin-top: 1rem;
+    max-width: 19.56rem;
+    border-radius: 8.67px;
+    width: 313px;
+    max-height:  123px;
+    // Prevent stretching of image
+    object-fit: cover;
+    transition: all .8s ease-in-out; // adjust timing to your needs
+    opacity: .8;
+
+    // Unless its the top article
+ 
+}
+
+
+// Top Article Subcard
+.topArticleCard{
+    width: 353px;
+    height: 107px;
+    border-radius: 22px;
+    background: #31363F;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);   
+
+    //Behind main card
+    position: absolute;
+    z-index: 1;
+    top:-41px;
+
+
+    // Align in middle
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.topArticleText{
+    color: #CECECE;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+
+    // Align in middle
+    margin-top:11px;
+    margin-left: 29px;
 }
