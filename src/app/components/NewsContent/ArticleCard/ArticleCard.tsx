@@ -1,37 +1,32 @@
 'use strict'
 
+import { motion } from 'framer-motion';
 import styles from './ArticleCard.module.scss'
 import Image from 'next/image'
 
-interface ArticleCardProps {
+type ArticleCardProps = {
     title: string;
     content: string;
     date: string;
-    image: string | null;
+    image: string;
     url: string;
-    source: string
+    source: string;
     topArticle: boolean;
 }
 
-export default function ArticleCard({ title, content, date, image, url, source, topArticle }: ArticleCardProps) {
-
-    // Render date string in format: "July 27th, 2023" format from 2023-07-26T17:19:52+00:00
+const ArticleCard: React.FC<ArticleCardProps> = ({ title, content, date, image, url, source, topArticle }) => {
     const dateString = new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-
-    //Remove tld from source
     const nonUrlSource = source.replace('.com', '').replace('.co.uk', '')
-    return (
-        <a className={styles.cardWrapper} href={url} target='_blank'>
 
-            {/* If top article is true show top article card */}
+    return (
+        <div className={styles.cardWrapper}
+        >
             {topArticle && (
                 <div className={styles.topArticleCard}>
                     <p className={styles.topArticleText}>TOP OF THE DAY</p>
                 </div>
             )}
-
             <div className={`${styles.card} ${topArticle ? styles.topArticle : ''}`}>
-
                 <div className={styles.newsHeader}>
                     {title}
                 </div>
@@ -41,11 +36,12 @@ export default function ArticleCard({ title, content, date, image, url, source, 
                 <div className={styles.content}>
                     <p>{content}</p>
                 </div>
-                {/* If image defined */}
                 {image && (
                     <img src={image} alt={title} className={styles.image} />
                 )}
-            </div >
-        </a >
-    )
+            </div>
+        </div>
+    );
 }
+
+export default ArticleCard;

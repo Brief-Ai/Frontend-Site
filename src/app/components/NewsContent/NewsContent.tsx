@@ -2,6 +2,8 @@
 
 import ArticleCard from './ArticleCard/ArticleCard'
 import styles from './NewsContent.module.scss'
+import { motion } from "framer-motion";
+
 
 export default function NewsContent() {
 
@@ -62,6 +64,7 @@ export default function NewsContent() {
             "source": "TMZ.com",
             "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
             "category": "general",
+
             "language": "en",
             "country": "us",
             "published_at": "2020-08-05T05:47:24+00:00"
@@ -80,31 +83,66 @@ export default function NewsContent() {
         },
     ]
 
+    const container = {
+        hidden: { opacity: 1, scale: 0 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                delayChildren: .3,
+                staggerChildren: .6,
+            },
+        },
+    };
 
-
+    const item = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.5, // Adjust the duration as needed
+            },
+        },
+    };
 
     return (
         <section className={styles.wrapper}>
-            <div className={styles.articles}>
+            <motion.div
+                className={styles.articles}
+                variants={container} // Apply the container variants
+                initial="hidden"
+                animate="visible"
+            >
                 {sampleData.map((article, index) => {
                     // Limit title to 5 words and add ellipsis
-                    const title = article.title.split(' ').slice(0, 7).join(' ') + '...'
-                    //Limit content to 20 words and add ellipsis
-                    const content = article.description.split(' ').slice(0, 16).join(' ') + '...'
+                    const title = article.title.split(' ').slice(0, 7).join(' ') + '...';
+                    // Limit content to 20 words and add ellipsis
+                    const content = article.description.split(' ').slice(0, 16).join(' ') + '...';
+
                     return (
-                        <ArticleCard
+                        <motion.a
                             key={index}
-                            title={title}
-                            content={content}
-                            date={article.published_at}
-                            image={article.image}
-                            source={article.source}
-                            url={article.url}
-                            topArticle={index === 0}
-                        />
-                    )
+                            whileHover={{ scale: 1.05 }}
+                            // Adjust the animation transition as needed
+                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                            variants={item}
+                            href={article.url}
+                            target='_blank'
+                        >
+                            <ArticleCard
+                                title={title}
+                                content={content}
+                                date={article.published_at}
+                                image={article.image}
+                                source={article.source}
+                                url={article.url}
+                                topArticle={index === 0}
+                            />
+                        </motion.a>
+                    );
                 })}
-            </div>
+            </motion.div>
         </section>
-    )
+    );
 }
