@@ -156,7 +156,26 @@
     // No top margin or padding
     margin-top: 0;
     padding-top: 0;
+
+
+    // Max height of 400px
+    max-height: 400px;
+    // Overflow scroll
+    overflow-y: scroll;
+    // Hide scrollbar
+    overflow-x: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: none;
+
 }
+
+.searchResults::-webkit-scrollbar {
+    display: none;
+}
+
+
+
 
 .searchResultItem{
 // Inline image and text

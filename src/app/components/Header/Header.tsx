@@ -2,138 +2,70 @@
 
 import styles from './Header.module.scss'
 import Image from 'next/image'
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import resultReloadSvg from '../../../../public/svgs/resultReload.svg'
 import searchArticles from '../../api/external-api';
+import debounce from '../../utils/useDebounce';
 
-const sampleData = [
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-    {
-        "author": "TMZ Staff",
-        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-        "source": "TMZ.com",
-        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-        "category": "general",
-        "language": "en",
-        "country": "us",
-        "published_at": "2020-08-05T05:47:24+00:00"
-    },
-]
-
-interface SearchResultsProps {
-    searchTerm: string;
-}
-
-const searchResultsVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+type ApiResponse = Array<{
+    id: string
+    title: string
+    description: string
+    url: string
+    published_at: string
+    category: string
+    image: string | null
+}>
 
 export default function Header() {
-
+    // Reference to the search bar element for detecting clicks outside
     const searchBarRef = useRef<HTMLDivElement>(null);
+    const [searchResults, setSearchResults] = useState<ApiResponse>([]);
 
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-
+    // Effect to handle clicks outside the search bar and close search results
     useEffect(() => {
         function handleClickOutside(event: Event) {
             if (searchBarRef.current && !searchBarRef.current.contains(event.target as Node)) {
-                setSearchTerm(''); // Clear the search term
-                setSearchResults([]); // Clear the search results
-                
+                console.log('Clicked outside search bar');
+                setSearchResults([]);
             }
         }
 
-
-        // Bind the event listener
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
-            // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [searchBarRef]);
 
-
-
     function SearchBar() {
-        const [searchTerm, setSearchTerm] = useState('');
         const [hasStartedTyping, setHasStartedTyping] = useState(false);
+        const [searchTerm, setSearchTerm] = useState('');
+        const [myResults, setMyResults] = useState<ApiResponse>([]);
 
+        // Debounce search function to avoid excessive API calls while typing
+        const debouncedSearch = useCallback(
+            debounce(async (value: string) => {
+                console.log('Fetching search results for term:', value);
+                const results = await searchArticles(value + ' ');
+                console.log('Search results:', results);
+                setMyResults(results);
+            }, 1500),
+            []
+        );
+
+        // Handler for input change event
         const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchTerm(event.target.value);
+            let value = event.target.value;
+            setSearchTerm(value);
             setHasStartedTyping(true);
-            searchArticles(event.target.value);
+            debouncedSearch(value)
         };
-
-
-
 
         return (
             <>
-                <div ref={searchBarRef}
+                <div
+                    ref={searchBarRef}
                     className={searchTerm ? [styles.searchBarWrapperResults, styles.searchBarWrapper].join(" ") : styles.searchBarWrapper}
                 >
                     <Image
@@ -151,21 +83,26 @@ export default function Header() {
                         className={styles.searchBarInput}
                     />
                 </div>
-                {searchTerm && <motion.div
-                    ref={searchBarRef}
-                    className={styles.searchResults}
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: hasStartedTyping ? 1 : 0, y: 0 }}
-                    transition={{ duration: 0.5 }} >
-                    {hasStartedTyping && searchTerm && <SearchResults searchTerm={searchTerm} />}
-                </motion.div >}
+                {searchTerm && (
+                    <motion.div
+                        className={styles.searchResults}
+                        initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: hasStartedTyping ? 1 : 0, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        ref={searchBarRef}
+                    >
+                        {hasStartedTyping && searchTerm && <SearchResults results={myResults} />}
+                    </motion.div>
+                )}
             </>
         );
     }
 
+    interface SearchResultsProps {
+        results: ApiResponse;
+    }
 
-
-    function SearchResults({ searchTerm }: SearchResultsProps) {
+    function SearchResults({ results }: SearchResultsProps) {
         const containerVariants = {
             hidden: { opacity: 1, scale: 0 },
             visible: {
@@ -177,7 +114,6 @@ export default function Header() {
                 },
             },
         };
-
         const itemVariants = {
             hidden: { y: 20, opacity: 0 },
             visible: {
@@ -185,58 +121,93 @@ export default function Header() {
                 opacity: 1,
             },
         };
-
         const separatorVariants = {
             hidden: { opacity: 0, y: 20 },
             visible: {
                 opacity: 1,
                 y: 0,
                 transition: {
-                    duration: 0.5, // Adjust the duration as needed
+                    duration: 0.5,
                 },
             },
         };
 
-        const [searchResults, setSearchResults] = useState([]);
+        const [searchResults, setSearchResults] = useState<ApiResponse>(results);
 
-        const search = async (query: string) => {
-            // Call your search API here
-            // This is just a placeholder, replace it with your actual search logic
-            fetch(`/api/search?query=${query}`)
-                .then(response => response.json())
-                .then(data => setSearchResults(data));
-        }
+        // Update search results when the "results" prop changes
+        useEffect(() => {
+            // If results prop is empty, set search results to aarray with one empty object to show "No results" message
+            if (results.length === 0) {
+                setSearchResults([{
+                    id: '',
+                    title: 'No results',
+                    description: '',
+                    url: '',
+                    published_at: '',
+                    category: '',
+                    image: null
+                }]);
+            } else
+                setSearchResults(results);
+        }, [results]);
+
+
 
         return (
             <motion.ul
+                key={searchResults.length} // Use the length of the searchResults array as the key
                 className={styles.searchResultsList}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
             >
-                {sampleData.map((result, index) => (
-                    <>
-                        {/* If index is 0 then make hr have not top margin */}
-                        {index === 0 ? <motion.hr
-                            variants={separatorVariants}
-                            style={{ marginTop: 0 }}
-                            className={styles.resultSeparator} /> : <motion.hr
-                            variants={separatorVariants}
-                            className={styles.resultSeparator} />}
-                        <motion.li
-                            className={styles.searchResultItem}
-                            key={index}
-                            variants={itemVariants}
-                        >
-                            {/*   reload icon   */}
-                            <Image src={resultReloadSvg} alt="Reload Icon" width={14} height={14} className={styles.reloadIcon} />
-                            <div className={styles.searchResultItemTitle}>{index + 1}. {result.title},{result.source}</div>
-                        </motion.li>
-                    </>
+                {searchResults.map((result, index) => (
+                    <a key={index} href={result.url} target='_blank'>
+                        {index === 0 ? (
+                            <motion.hr
+                                variants={separatorVariants}
+                                style={{ marginTop: 0 }}
+                                className={styles.resultSeparator}
+                            />
+                        ) : (
+                            <motion.hr
+                                variants={separatorVariants}
+                                className={styles.resultSeparator}
+                            />
+                        )}
+                        {/* If title is 'No results' dont show svg and number */}
+                        {result.title == 'No results' && (
+                            <motion.li
+                                className={styles.searchResultItem}
+                                key={index}
+                                variants={itemVariants}
+                            >
+                                <div className={styles.searchResultItemTitle}>
+                                    {result.title}
+                                </div>
+                            </motion.li>
+                        ) || (
+                                <motion.li
+                                    className={styles.searchResultItem}
+                                    key={index}
+                                    variants={itemVariants}
+                                >
+                                    <Image
+                                        src={resultReloadSvg}
+                                        alt="Reload Icon"
+                                        width={14}
+                                        height={14}
+                                        className={styles.reloadIcon}
+                                    />
+                                    <div className={styles.searchResultItemTitle}>{index + 1}. {result.title}</div>
+                                </motion.li>
+                            )}
 
+
+
+                    </a>
                 ))}
             </motion.ul>
-
         );
     }
 
@@ -262,8 +233,7 @@ export default function Header() {
                 <div className={[styles.btn, styles.loginBtn].join(" ")} >
                     Login
                 </div>
-            </div >
-
-        </section >
+            </div>
+        </section>
     )
 }
