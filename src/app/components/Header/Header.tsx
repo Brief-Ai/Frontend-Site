@@ -162,7 +162,8 @@ export default function Header() {
                 animate="visible"
             >
                 {searchResults.map((result, index) => (
-                    <a key={index} href={result.url} target='_blank'>
+                    <a key={index} href={result.url} target='_blank
+                    '>
                         {index === 0 ? (
                             <motion.hr
                                 variants={separatorVariants}
