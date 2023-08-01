@@ -5,6 +5,82 @@ import Image from 'next/image'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import resultReloadSvg from '../../../../public/svgs/resultReload.svg'
+import searchArticles from '../../api/external-api';
+
+const sampleData = [
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+    {
+        "author": "TMZ Staff",
+        "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
+        "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
+        "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
+        "source": "TMZ.com",
+        "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+        "category": "general",
+        "language": "en",
+        "country": "us",
+        "published_at": "2020-08-05T05:47:24+00:00"
+    },
+]
 
 interface SearchResultsProps {
     searchTerm: string;
@@ -16,80 +92,7 @@ const searchResultsVariants = {
 };
 
 export default function Header() {
-    const sampleData = [
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-    ]
+
     const searchBarRef = useRef<HTMLDivElement>(null);
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -100,6 +103,7 @@ export default function Header() {
             if (searchBarRef.current && !searchBarRef.current.contains(event.target as Node)) {
                 setSearchTerm(''); // Clear the search term
                 setSearchResults([]); // Clear the search results
+                
             }
         }
 
@@ -121,6 +125,7 @@ export default function Header() {
         const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setSearchTerm(event.target.value);
             setHasStartedTyping(true);
+            searchArticles(event.target.value);
         };
 
 

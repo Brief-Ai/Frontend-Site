@@ -89,8 +89,8 @@ export default function NewsContent() {
             opacity: 1,
             scale: 1,
             transition: {
-                delayChildren: .3,
-                staggerChildren: .6,
+                delayChildren: 1,
+                staggerChildren: .4,
             },
         },
     };

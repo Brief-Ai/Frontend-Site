@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 export default function Home() {
 
 
-
   const text = "Your Daily Brief: Stay Informed. Stay Empowered.";
   //         Daily Brief: Stay <span className={styles.gradient1}>Informed</span>. Stay <span className={styles.gradient2}>Empowered</span>. */}
 
