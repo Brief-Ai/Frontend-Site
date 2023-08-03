@@ -12,7 +12,10 @@
     // Center the image and text
     text-align: center;
 
-    margin-left:1.9rem
+    margin-left:1.9rem;
+    :hover{
+        cursor: pointer;
+    }
 }
 
 .logo{
@@ -45,6 +48,8 @@
     align-items: center;
     // justify-content: space-between;
 
+
+
     // Dimensions
     width: 931px;   
     height: 52px;
@@ -65,6 +70,12 @@
         // Remove border radius from bottom left and right
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+    }
+
+    // if also has class homePage
+    &.feedPage{
+        position: relative;
+        left: -82.5px;
     }
     
 }
@@ -126,11 +137,23 @@
 .signUpBtn{
     background-color: #EDEDED;
     color: #0A0A0A;
+    transition: background-color 0.3s, color 0.3s; 
+    &:hover{
+        background-image:linear-gradient(90deg, #7928CA 0%, #FF0080 100%);
+        color: white;
+        cursor: pointer;
+    }
 }
 .loginBtn{
     background-color:#272727 ;
     color: #EDEDED;
     margin-left:  1.32rem;
+    transition: background-color 0.3s, color 0.3s;
+    &:hover{
+        background-image:linear-gradient(90deg, #007CF0 0%, #00DFD8 100%);
+        color: white;
+        cursor: pointer;
+    }
 }
 
 
@@ -203,4 +226,14 @@ display: inline-flex;
 
 .reloadIcon{
 margin-left: 7px;
+}
+
+.progressBar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background:#A5A5A5;
+    transform-origin: 0%;
 }

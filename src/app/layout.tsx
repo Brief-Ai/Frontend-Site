@@ -2,6 +2,7 @@ import './styles/globals.scss'
 import './styles/fonts.scss'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Header from './components/Header/Header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,7 +23,10 @@ export default function RootLayout({
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Header />
+        <>{children}</>
+      </body>
     </html>
   )
 }

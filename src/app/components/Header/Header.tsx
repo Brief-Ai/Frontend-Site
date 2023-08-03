@@ -3,10 +3,13 @@
 import styles from './Header.module.scss'
 import Image from 'next/image'
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import resultReloadSvg from '../../../../public/svgs/resultReload.svg'
-import searchArticles from '../../api/external-api';
+import { searchArticles, validateToken } from '../../api/external-api';
 import debounce from '../../utils/useDebounce';
+import { getAccessTokenFromCookie, logout } from '../../utils/auth';
+import { usePathname, useRouter } from 'next/navigation';
+
 
 type ApiResponse = Array<{
     id: string
@@ -19,9 +22,83 @@ type ApiResponse = Array<{
 }>
 
 export default function Header() {
+
+    // Manages auth protected routes and redirects
+    const router = useRouter();
+    const pathName = usePathname()
+
+    const [dynamicPathName, setDynamicPathName] = useState(pathName)
+
+    // Set the dynamic path name to the current path name
+    // Update dynamic path name when the path name changes
+
+
+
+    useEffect(() => {
+        setDynamicPathName(pathName)
+        // Function to check if the user is logged in
+        const checkUserLoggedIn = async () => {
+            try {
+                // Retrieve the access token from the cookie
+                const accessToken = await getAccessTokenFromCookie();
+                if (!accessToken) {
+                    // If there is no access token we redirect to "/" page.
+                    console.log(`No access token while on page ${pathName}`);
+
+                    // If current page is not login or signup page, redirect to the login page
+                    if (dynamicPathName !== '/login' && dynamicPathName !== '/signup') {
+                        setDynamicPathName('/login')
+                        router.push('/login');
+                    }
+                    return
+                }
+                const validTokenResponse = await validateToken(accessToken);
+                if (validTokenResponse?.status === 200) {
+                    // User is logged in
+                    console.log(`User is logged in while on page ${pathName}`);
+                    // If current page is login page, redirect to the home page
+                    if (dynamicPathName === '/login' || dynamicPathName === '/signup') {
+                        setDynamicPathName('/')
+                        router.push('/');
+                    }
+
+                } else {
+                    // User is not logged in
+                    console.log('User is not logged in');
+
+                    // TODO: If access token is expired, refresh the token
+
+
+                    // If current page is not login page, redirect to the login page
+                    if (dynamicPathName !== '/login' && dynamicPathName !== '/signup') {
+                        setDynamicPathName('/login')
+                        router.push('/login');
+                    }
+
+                }
+
+            } catch (error) {
+                console.error('Error verifying token:', error);
+                // Handle any error that occurs during token verification (e.g., network error)
+                // For now, you can redirect the user to the login page as a fallback
+                router.push('/login');
+            }
+        };
+
+        // Call the function to check if the user is logged in
+        checkUserLoggedIn();
+    }, []);
+
+
+
+
+
+
+
     // Reference to the search bar element for detecting clicks outside
     const searchBarRef = useRef<HTMLDivElement>(null);
     const [searchResults, setSearchResults] = useState<ApiResponse>([]);
+
 
     // Effect to handle clicks outside the search bar and close search results
     useEffect(() => {
@@ -64,9 +141,20 @@ export default function Header() {
 
         return (
             <>
-                <div
+                {/* If  searchTerm show searchBarWrapperResults*/}
+                {/* If  window.location.pathname is / then add class feedPage*/}
+
+                <motion.div
                     ref={searchBarRef}
-                    className={searchTerm ? [styles.searchBarWrapperResults, styles.searchBarWrapper].join(" ") : styles.searchBarWrapper}
+                    className={
+                        [searchTerm ? styles.searchBarWrapperResults : '', styles.searchBarWrapper, dynamicPathName === '/' ? styles.feedPage : ''].join(" ")
+                    }
+                    initial="visible"
+                    animate="visible"
+                    variants={{
+                        hidden: { opacity: 0, y: -130 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                    }}
                 >
                     <Image
                         src="/svgs/search.svg"
@@ -82,7 +170,7 @@ export default function Header() {
                         placeholder="Search relevant news..."
                         className={styles.searchBarInput}
                     />
-                </div>
+                </motion.div >
                 {searchTerm && (
                     <motion.div
                         className={styles.searchResults}
@@ -93,7 +181,8 @@ export default function Header() {
                     >
                         {hasStartedTyping && searchTerm && <SearchResults results={myResults} />}
                     </motion.div>
-                )}
+                )
+                }
             </>
         );
     }
@@ -104,28 +193,29 @@ export default function Header() {
 
     function SearchResults({ results }: SearchResultsProps) {
         const containerVariants = {
-            hidden: { opacity: 1, scale: 0 },
+            hidden: { opacity: 1, scale: 0, },
             visible: {
                 opacity: 1,
                 scale: 1,
                 transition: {
-                    delayChildren: 0.3,
-                    staggerChildren: 0.2,
+                    delayChildren: 0,
+                    staggerChildren: 0.1,
                 },
             },
         };
         const itemVariants = {
-            hidden: { y: 20, opacity: 0 },
+            hidden: { y: 20, x: 20, opacity: 0, },
             visible: {
                 y: 0,
+                x: 0,
                 opacity: 1,
             },
         };
         const separatorVariants = {
-            hidden: { opacity: 0, y: 20 },
+            hidden: { opacity: 0, x: 20 },
             visible: {
                 opacity: 1,
-                y: 0,
+                x: 0,
                 transition: {
                     duration: 0.5,
                 },
@@ -184,7 +274,7 @@ export default function Header() {
                                 variants={itemVariants}
                             >
                                 <div className={styles.searchResultItemTitle}>
-                                    {result.title}
+                                    {result.title + '...'}
                                 </div>
                             </motion.li>
                         ) || (
@@ -212,29 +302,88 @@ export default function Header() {
         );
     }
 
+    const logoVariants = {
+        hidden: { opacity: 0, y: -30 },
+        visible: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.8 } },
+    };
+
+    const buttonVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: { opacity: 1, y: 0, transition: { delay: 0.6, duration: 0.8 } },
+    };
+
     return (
-        <section className={styles.wrapper}>
-            <div className={styles.logoNameWrapper}>
-                <Image
+        // Style of justify content is set to space-between to push the action buttons to the right if window is not '/'
+        <section className={styles.wrapper} style={{ justifyContent: dynamicPathName === '/' ? 'center' : 'space-between' }}>
+            {/* <p>{dynamicPathName}</p> */}
+            <motion.a
+                className={styles.logoNameWrapper}
+                initial="hidden"
+                animate="visible"
+                variants={logoVariants}
+                href="/"
+                target='_self'
+            >
+                <motion.img
                     src="/images/brief.png"
                     alt="Brief Ai Logo"
                     width={52}
                     height={52}
                     className={styles.logo}
                 />
-                <div className={styles.bizName}>
-                    Brief.
-                </div>
-            </div>
-            <SearchBar />
-            <div className={styles.actionButtonWrapper}>
-                <div className={[styles.btn, styles.signUpBtn].join(" ")} >
-                    Sign Up
-                </div>
-                <div className={[styles.btn, styles.loginBtn].join(" ")} >
-                    Login
-                </div>
-            </div>
-        </section>
+                <motion.div
+                    className={styles.bizName}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, transition: { delay: 1, duration: 0.8 } }}
+                >
+                    Brief. ({dynamicPathName})
+                </motion.div>
+            </motion.a>
+            {/* Hide if not window '/' */}
+            {dynamicPathName === '/' && (
+                <SearchBar />
+            )}
+            <motion.div
+                className={styles.actionButtonWrapper}
+                initial="hidden"
+                animate="visible"
+                variants={buttonVariants}
+            >
+                {dynamicPathName !== '/' && (
+                    <>
+                        <motion.a
+                            className={[styles.btn, styles.signUpBtn].join(' ')}
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                            href="/signup"
+                            target='_self'
+                        >
+                            Sign Up
+                        </motion.a>
+                        <motion.a
+                            className={[styles.btn, styles.loginBtn].join(' ')}
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                            href="/login"
+                            target='_self'
+                        >
+                            Login
+                        </motion.a>
+                    </>
+                )}
+                {dynamicPathName === '/' && (
+                    <motion.a
+                        className={[styles.btn, styles.signUpBtn].join(' ')}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                        onClick={() => {
+                            logout();
+                        }}
+                    >
+                        Log Out
+                    </motion.a>
+                )}
+            </motion.div>
+        </section >
     )
 }

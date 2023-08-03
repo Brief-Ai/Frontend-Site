@@ -5,14 +5,17 @@ import styles from './styles/page.module.scss'
 import Header from './components/Header/Header'
 import NewsContent from './components/NewsContent/NewsContent'
 import { motion } from "framer-motion";
+import { getAuthTokenFromCookie } from './utils/auth';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { validateToken } from './api/external-api';
 
 export default function Home() {
 
 
-  const text = "Your Daily Brief: Stay Informed. Stay Empowered.";
-  //         Daily Brief: Stay <span className={styles.gradient1}>Informed</span>. Stay <span className={styles.gradient2}>Empowered</span>. */}
 
-  const words = text.split(" ");
+
+
 
   const textVariants = {
 
@@ -22,7 +25,6 @@ export default function Home() {
 
   return (
     <main className={styles.wrapper}>
-      <Header />
       <section className={styles.contentSection}>
         <motion.div
           initial="hidden"

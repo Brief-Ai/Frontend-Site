@@ -1,0 +1,26 @@
+.card {
+    /* existing styles for the card */
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+    text-align: left;
+    font-weight: bold;
+    width: 100%;
+    display: flex;
+    font-size: 14px;
+  }
+
+.success {
+background-color: green; /* Set your desired background color for success messages */
+color: white;
+}
+
+.error {
+background-color: #e76f51; /* Set your desired background color for error messages */
+color: white;
+}
+
+.warning {
+background-color: yellow; /* Set your desired background color for warning messages */
+color: black;
+}

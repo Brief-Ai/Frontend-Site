@@ -1,0 +1,114 @@
+.mainCard{
+    width: 931px;
+    height: 549px;
+
+    border-radius: 10.72px;
+    margin: 0 auto;
+    margin-top: 129px;
+
+    // background-color: #161616;
+    //Background Image
+    background-image: url("/svgs/ilst4.svg");
+    background-repeat: no-repeat;
+    // Also have a background color
+    background-color: #161616;
+    // Align background image to right side
+    background-position: right;
+}
+
+.formWrapper{
+    padding-top: 36px;
+    padding-left: 32px;
+}
+
+.formTitle{
+    color: #fff;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.formSubtitle{
+    color:  #888;
+    font-family: Poppins;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+
+    //Spacing
+    margin-bottom: 14px;
+}
+
+.formItems{}
+
+.formItem{}
+
+.label{
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 14.667px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 21.333px; /* 145.455% */
+
+    // Margin 
+    margin-bottom: 9px;
+
+
+}
+
+.input{
+    border-radius: 6px;
+    width: 404px;
+    background: #000;
+
+    //Padding
+    padding: 12px 16px;
+
+
+    // Text
+    overflow: hidden;
+    color: #A5A5A5;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+
+    // No border on hover or focus
+    border: none;
+    &:focus{
+        border: none;
+    }
+    &:focus{
+        outline: none;
+    }
+    margin-bottom: 32px;
+}
+
+.label, .input {
+    display: flex;
+    flex-direction: column;
+}
+
+.submitBtn{
+    border-radius: 6px;
+    background: #EDEDED;
+
+    color: #0A0A0A;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 600;
+
+    // Paddding
+    padding: 9px 20px;
+}
+
+.statusMessageWrapper{
+    max-width: 404px;
+    margin-top: 16px;
+}
+
+.refToLoginText{
+    
+}
