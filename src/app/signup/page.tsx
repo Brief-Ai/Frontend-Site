@@ -109,6 +109,9 @@ export default function Login() {
             animate="visible"
             variants={containerVariants} // Use containerVariants for the container animation
         >
+            <style jsx global>
+                {`body {background-image: url("/images/backgroundStars.png");}`}
+            </style>
             <motion.div
                 className={styles.mainCard}
                 variants={cardVariants} // Use cardVariants for the card animation

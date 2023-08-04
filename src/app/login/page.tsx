@@ -99,12 +99,15 @@ export default function Login() {
             animate="visible"
             variants={containerVariants} // Use containerVariants for the container animation
         >
+            <style jsx global>
+                {`body {background-image: url("/images/backgroundStars.png");}`}
+            </style>
             <motion.div
                 className={styles.mainCard}
                 variants={cardVariants} // Use cardVariants for the card animation
             >
                 <div className={styles.formWrapper}>
-                    <h2 className={styles.formTitle}>Log In</h2>
+                    <h2 className={styles.formTitle}>Login to your account</h2>
                     <p className={styles.formSubtitle}>Sign in to your account to continue.</p>
                     <div className={styles.formItems}>
                         {/* Signup form */}
@@ -122,7 +125,7 @@ export default function Login() {
                                     type="text"
                                     required
                                     id="email"
-                                    placeholder="Create a username"
+                                    placeholder="Username"
                                     className={styles.input}
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
@@ -136,7 +139,7 @@ export default function Login() {
                                     type="password"
                                     required
                                     id="password"
-                                    placeholder="Enter your password"
+                                    placeholder="Password"
                                     className={styles.input}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}

@@ -1,6 +1,17 @@
+//Body background image
+
+.bodyStyle{
+    height: 100vh;
+    background: red !important;
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // background-position: center;
+    // background-attachment: fixed;
+}
+
 .mainCard{
-    width: 931px;
-    height: 549px;
+    width: 980px;
+    height: 481px;
 
     border-radius: 10.72px;
     margin: 0 auto;
@@ -17,12 +28,12 @@
     
 
     // Move background image position
-    background-position: 50% 50%;
+    background-position: 49% 50%;
 }
 
 .formWrapper{
     padding-top: 36px;
-    padding-left: 32px;
+    padding-left: 74px;
 }
 
 .formTitle{
@@ -31,17 +42,20 @@
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
+    line-height: 24px; /* 100% */
+    margin-bottom: 4px;
 }
 
 .formSubtitle{
-    color:  #888;
+    color: #888;
     font-family: Poppins;
     font-size: 11px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
+    line-height: 16px; /* 145.455% */
 
     //Spacing
-    margin-bottom: 14px;
+    margin-bottom: 27px;
 }
 
 .formItems{}
@@ -57,13 +71,14 @@
     line-height: 21.333px; /* 145.455% */
 
     // Margin 
-    margin-bottom: 9px;
+    margin-bottom: 17px;
 
 
 }
 
 .input{
-    border-radius: 6px;
+    border-radius: 7px;
+    height: 42px;
     width: 404px;
     background: #000;
 
@@ -72,12 +87,12 @@
 
 
     // Text
-    overflow: hidden;
-    color: #A5A5A5;
+    color: #A9A9A9;
     font-family: Inter;
     font-size: 14px;
+    font-style: italic;
     font-weight: 400;
-
+    line-height: 18.469px; /* 131.922% */
     // No border on hover or focus
     border: none;
     &:focus{
@@ -86,7 +101,7 @@
     &:focus{
         outline: none;
     }
-    margin-bottom: 32px;
+    margin-bottom: 21px;
 }
 
 .label, .input {
@@ -96,7 +111,10 @@
 
 .submitBtn{
     border-radius: 6px;
-    background: #EDEDED;
+    background: linear-gradient(195deg, #027FF0 0%, #02DDD9 100%);
+
+    width: 404px;
+    height: 42px;
 
     color: #0A0A0A;
     text-align: center;
@@ -106,6 +124,7 @@
 
     // Paddding
     padding: 9px 20px;
+    margin-top: 20px
 }
 
 .statusMessageWrapper{
