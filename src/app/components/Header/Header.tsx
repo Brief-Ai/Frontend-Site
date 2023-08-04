@@ -339,7 +339,8 @@ export default function Header() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, transition: { delay: 1, duration: 0.8 } }}
                 >
-                    Brief. ({dynamicPathName})
+                    Brief.
+                    {/* ({dynamicPathName}) */}
                 </motion.div>
             </motion.a>
             {/* Hide if not window '/' */}
