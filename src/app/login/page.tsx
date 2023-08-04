@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createAccount, login, validateToken } from '../api/external-api';
-import { getAccessTokenFromCookie, setAccessTokenInCookie } from '../utils/auth'; // Import the utility function
+import { getAccessTokenFromCookie, setAccessTokenInCookie, setRefreshTokenInCookie } from '../utils/auth'; // Import the utility function
 import styles from './login.module.scss';
 import { showMessage, hideMessage, MessageType, getMessageStyles } from '../utils/messageUtils/messageUtils'; // Import the utility functions
 import { motion } from 'framer-motion'; // Import the motion component
@@ -37,6 +37,9 @@ export default function Login() {
             showMessage(loginMessage, MessageType.SUCCESS, setStatusMessage, setMessageType);
             // You may want to redirect or take other actions upon successful account creation
             setAccessTokenInCookie(data.token.access);
+            setRefreshTokenInCookie(data.token.refresh);
+
+
             setTimeout(() => {
                 hideMessage(setStatusMessage, setMessageType);
                 // Redirect to the home page

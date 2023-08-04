@@ -70,13 +70,30 @@ export async function login(username: string, password: string) {
 
 export async function validateToken(accessToken: string) {
   // Take in a access token and return true if it is valid, false otherwise
-  console.log(`Api == Attempting to validate token...`);
+  console.log(`Api == Attempting to validate access token...`);
   let response = await rawApiCall(`${backendApiUrl}/account/validate_token/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
+  });
+  return response;
+}
+
+// Function called refeshToken that takes in a refresh token and returns a new access token
+export async function refreshToken(refreshToken: string) {
+  console.log(
+    `Api == Attempting to use refresh token to get new access token...`
+  );
+  let response = await rawApiCall(`${backendApiUrl}/account/token/refresh/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: `${refreshToken}`,
+    }),
   });
   return response;
 }

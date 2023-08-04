@@ -6,7 +6,7 @@ import styles from './signup.module.scss';
 import { showMessage, hideMessage, MessageType, getMessageStyles } from '../utils/messageUtils/messageUtils'; // Import the utility functions
 import { motion } from 'framer-motion'; // Import the motion component
 import { useRouter } from 'next/navigation';
-import { setAccessTokenInCookie } from '../utils/auth';
+import { setAccessTokenInCookie, setRefreshTokenInCookie } from '../utils/auth';
 
 export default function Login() {
 
@@ -39,6 +39,7 @@ export default function Login() {
                 showMessage(data?.response + ' Redirecting...', MessageType.SUCCESS, setStatusMessage, setMessageType);
                 // You may want to redirect or take other actions upon successful account creation
                 setAccessTokenInCookie(data.token.access);
+                setRefreshTokenInCookie(data.token.refresh);
                 setTimeout(() => {
                     hideMessage(setStatusMessage, setMessageType);
                     window.location.href = '/'; // Redirect to the home page

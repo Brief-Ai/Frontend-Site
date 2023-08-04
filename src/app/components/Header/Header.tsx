@@ -7,7 +7,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 import resultReloadSvg from '../../../../public/svgs/resultReload.svg'
 import { searchArticles, validateToken } from '../../api/external-api';
 import debounce from '../../utils/useDebounce';
-import { getAccessTokenFromCookie, logout } from '../../utils/auth';
+import { generateNewAccessToken, getAccessTokenFromCookie, logout } from '../../utils/auth';
 import { usePathname, useRouter } from 'next/navigation';
 
 
@@ -33,50 +33,54 @@ export default function Header() {
     // Update dynamic path name when the path name changes
 
 
-
     useEffect(() => {
         setDynamicPathName(pathName)
+
+        const attemptRefreshAndRedirect = async () => {
+            // TODO: If access token is expired, refresh the token
+            //Attempt to refresh the token
+            const completedTokenRefresh = await generateNewAccessToken()
+            if (completedTokenRefresh) {
+                console.log('Token refresh completed')
+                if (dynamicPathName === '/login' || dynamicPathName === '/signup') {
+                    setDynamicPathName('/')
+                    router.push('/');
+                }
+            } else {
+                console.log('Token refresh failed')
+                if (dynamicPathName !== '/login' && dynamicPathName !== '/signup') {
+                    setDynamicPathName('/login')
+                    router.push('/login');
+                }
+            }
+        }
+
         // Function to check if the user is logged in
         const checkUserLoggedIn = async () => {
             try {
                 // Retrieve the access token from the cookie
                 const accessToken = await getAccessTokenFromCookie();
                 if (!accessToken) {
-                    // If there is no access token we redirect to "/" page.
                     console.log(`No access token while on page ${pathName}`);
-
-                    // If current page is not login or signup page, redirect to the login page
-                    if (dynamicPathName !== '/login' && dynamicPathName !== '/signup') {
-                        setDynamicPathName('/login')
-                        router.push('/login');
-                    }
+                    attemptRefreshAndRedirect()
                     return
                 }
+
+
                 const validTokenResponse = await validateToken(accessToken);
                 if (validTokenResponse?.status === 200) {
                     // User is logged in
-                    console.log(`User is logged in while on page ${pathName}`);
+                    // console.log(`User is logged in while on page ${pathName}`);
                     // If current page is login page, redirect to the home page
                     if (dynamicPathName === '/login' || dynamicPathName === '/signup') {
                         setDynamicPathName('/')
                         router.push('/');
                     }
-
                 } else {
                     // User is not logged in
                     console.log('User is not logged in');
-
-                    // TODO: If access token is expired, refresh the token
-
-
-                    // If current page is not login page, redirect to the login page
-                    if (dynamicPathName !== '/login' && dynamicPathName !== '/signup') {
-                        setDynamicPathName('/login')
-                        router.push('/login');
-                    }
-
+                    attemptRefreshAndRedirect()
                 }
-
             } catch (error) {
                 console.error('Error verifying token:', error);
                 // Handle any error that occurs during token verification (e.g., network error)
@@ -84,7 +88,6 @@ export default function Header() {
                 router.push('/login');
             }
         };
-
         // Call the function to check if the user is logged in
         checkUserLoggedIn();
     }, []);
