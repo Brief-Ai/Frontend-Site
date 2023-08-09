@@ -1,4 +1,19 @@
+import { getAccessTokenFromCookie } from "../utils/auth";
+
 const backendApiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+export type ApiResponse = articleData[];
+
+export type articleData = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  published_at: string;
+  source: string;
+  category: string;
+  image: string | null;
+};
 
 async function apiCall(url: string, options: RequestInit = {}) {
   // console.log(`API call URL: ${url}`);
@@ -25,10 +40,21 @@ async function rawApiCall(url: string, options: RequestInit = {}) {
 }
 
 export async function searchArticles(query: string) {
+  const accessTokenCookie = await getAccessTokenFromCookie();
+
   // Import backend api url from .env file
   console.log(`Pulling news articles for query: ${query}`);
   // console.log(`Backend API URL: ${backendApiUrl}`);
-  let response = await apiCall(`${backendApiUrl}/news/search/?q=${query}`);
+
+  // Make rawApiCall with authorization header
+  // let response = await apiCall(`${backendApiUrl}/news/search/?q=${query}`);
+  let response = await rawApiCall(`${backendApiUrl}/news/search/?q=${query}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessTokenCookie}`,
+    },
+  });
   return response;
 }
 
@@ -75,7 +101,7 @@ export async function validateToken(accessToken: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `${accessToken}`,
     },
   });
   return response;
@@ -93,6 +119,51 @@ export async function refreshToken(refreshToken: string) {
     },
     body: JSON.stringify({
       token: `${refreshToken}`,
+    }),
+  });
+  return response;
+}
+
+//Get recommendations for news articles
+export async function getRecommendations() {
+  console.log(`Api == Attempting to get recommendations...`);
+  let response = await rawApiCall(`${backendApiUrl}/news/recommended/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+}
+
+// Get users interests
+export async function getInterests() {
+  const accessTokenCookie = await getAccessTokenFromCookie();
+
+  console.log(`Api == Attempting to get interests...`);
+  let response = await rawApiCall(`${backendApiUrl}/news/get-interests/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessTokenCookie}`,
+    },
+  });
+  return response;
+}
+
+// Update users interests
+export async function updateInterests(interests: string[]) {
+  const accessTokenCookie = await getAccessTokenFromCookie();
+
+  console.log(`Api == Attempting to update interests...`);
+  let response = await rawApiCall(`${backendApiUrl}/news/update-interests/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessTokenCookie}`,
+    },
+    body: JSON.stringify({
+      interests: interests,
     }),
   });
   return response;

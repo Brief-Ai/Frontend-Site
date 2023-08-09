@@ -1,0 +1,155 @@
+//Body background image
+
+.bodyStyle{
+    height: 100vh;
+    background: red !important;
+    // background-repeat: no-repeat;
+    // background-size: cover;
+    // background-position: center;
+    // background-attachment: fixed;
+}
+
+.mainCard{
+    width: 551px;
+    height: 481px;
+
+    border-radius: 22px;
+    margin: 0 auto;
+    margin-top: 129px;
+
+    // background-color: #161616;
+    //Background Image
+    // Also have a background color
+    background-color: #161616;
+    // Align background image to right side
+    // background-position: right;
+
+
+    // 
+    filter: drop-shadow(0px 0px 250px rgba(255, 255, 255, 0.10));
+
+}
+
+.contentWrapper{
+    padding: 0 74px;
+    padding-top: 36px;
+}
+
+.interestContainer{
+    height:254px ;
+    // Vertical scroll
+    overflow-y: scroll;
+
+    // NO HORISONTAL SCROLL
+    overflow-x: hidden;
+    
+    // Make vertical scroll bar invisible
+    overflow-x: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: none;
+}
+
+.interestContainer::-webkit-scrollbar {
+    display: none;
+}
+
+
+.interestsWrapper{
+
+    // Grid that wrapps with a total width of 404px adn fit as many interests as possible
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap as needed */
+    width: 404px; /* Set the desired width */
+    margin: 0 auto; /* Center the container */
+    padding: 0; /* Remove default padding */
+    list-style: none; /* Remove bullet points */
+        
+}
+
+.interest{
+    background-color: #000000;
+    border-radius: 12.786px;
+    padding: 12px 14px;
+    height: 42px;
+
+    // Align image and text in a row
+    display: flex;
+    align-items: center; /* Vertically center items */
+    justify-content: space-between; /* Horizontally align items with space in between */
+
+    /* Fit width to content */
+    width: fit-content;
+}
+
+.interestText{
+    color: #A9A9A9;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18.469px; /* 131.922% */
+}
+
+.interestClose{
+    top: 20px;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+
+
+.input{
+    border-radius: 7px;
+    height: 42px;
+    width: 404px;
+    background: #000;
+
+    //Padding
+    padding: 12px 16px;
+
+
+    // Text
+    color: #A9A9A9;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 18.469px; /* 131.922% */
+    // No border on hover or focus
+    border: none;
+    &:focus{
+        border: none;
+    }
+    &:focus{
+        outline: none;
+    }
+    margin-bottom: 21px;
+}
+
+
+.submitBtn{
+    border-radius: 6px;
+    background: linear-gradient(195deg, #027FF0 0%, #02DDD9 100%);
+
+    width: 100%;
+    height: 42px;
+
+    color: #0A0A0A;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 15px;
+    font-weight: 600;
+
+    // Paddding
+    padding: 9px 20px;
+    margin-top: 20px
+}
+
+.statusMessageWrapper{
+    max-width: 404px;
+    margin-top: 16px;
+}
+

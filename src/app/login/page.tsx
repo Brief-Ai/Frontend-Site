@@ -28,8 +28,12 @@ export default function Login() {
 
         const response = await login(username, password);
         const data = response ? await response.json() : null;
+
+
+
         console.log('Response Data:', data);
         console.log('Response Code:', response?.status);
+        console.log('interests:', interests);
 
         if (response?.status === 200 || response?.status === 201) {
             // Account created successfully

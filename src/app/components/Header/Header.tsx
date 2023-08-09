@@ -5,21 +5,12 @@ import Image from 'next/image'
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import resultReloadSvg from '../../../../public/svgs/resultReload.svg'
-import { searchArticles, validateToken } from '../../api/external-api';
+import { ApiResponse, searchArticles, validateToken } from '../../api/external-api';
 import debounce from '../../utils/useDebounce';
 import { generateNewAccessToken, getAccessTokenFromCookie, logout } from '../../utils/auth';
 import { usePathname, useRouter } from 'next/navigation';
 
 
-type ApiResponse = Array<{
-    id: string
-    title: string
-    description: string
-    url: string
-    published_at: string
-    category: string
-    image: string | null
-}>
 
 export default function Header() {
 
@@ -127,9 +118,38 @@ export default function Header() {
         const debouncedSearch = useCallback(
             debounce(async (value: string) => {
                 console.log('Fetching search results for term:', value);
-                const results = await searchArticles(value + ' ');
-                console.log('Search results:', results);
-                setMyResults(results);
+                try {
+                    const response = await searchArticles(value + ' ');
+
+                    if (!response?.ok) {
+                        // Handle error fetching search results (e.g., network error)
+                        console.error('Error fetching search results:', response);
+                        return;
+                    }
+
+                    const results = await response.json();
+
+                    if (Array.isArray(results) && results.length === 0) {
+                        // If no results are returned, set the search results to "No results" object
+                        setMyResults([
+                            {
+                                id: '',
+                                title: 'No results',
+                                description: '',
+                                source: '',
+                                url: '',
+                                published_at: '',
+                                category: '',
+                                image: null
+                            }
+                        ]);
+                    } else {
+                        setMyResults(results || []);
+                    }
+                } catch (error) {
+                    console.error('Error fetching search results:', error);
+                    // Handle error fetching search results (e.g., network error)
+                }
             }, 1500),
             []
         );
@@ -235,6 +255,7 @@ export default function Header() {
                     id: '',
                     title: 'No results',
                     description: '',
+                    source: '',
                     url: '',
                     published_at: '',
                     category: '',
@@ -344,7 +365,7 @@ export default function Header() {
                 </motion.div>
             </motion.a>
             {/* Hide if not window '/' */}
-            {dynamicPathName === '/' && (
+            {(dynamicPathName === '/') && (
                 <SearchBar />
             )}
             <motion.div
@@ -353,7 +374,7 @@ export default function Header() {
                 animate="visible"
                 variants={buttonVariants}
             >
-                {dynamicPathName !== '/' && (
+                {(dynamicPathName != '/' && dynamicPathName != '/interests') && (
                     <>
                         <motion.a
                             className={[styles.btn, styles.signUpBtn].join(' ')}
@@ -375,9 +396,21 @@ export default function Header() {
                         </motion.a>
                     </>
                 )}
-                {dynamicPathName === '/' && (
+
+                {(dynamicPathName === '/' || dynamicPathName == '/interests') && (
                     <motion.a
                         className={[styles.btn, styles.signUpBtn].join(' ')}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                        href="/interests"
+                        target='_self'
+                    >
+                        My Interests
+                    </motion.a>
+                )}
+                {(dynamicPathName === '/' || dynamicPathName == '/interests') && (
+                    <motion.a
+                        className={[styles.btn, styles.loginBtn].join(' ')}
                         whileHover={{ scale: 1.02 }}
                         transition={{ type: "spring", stiffness: 400, damping: 10 }}
                         onClick={() => {

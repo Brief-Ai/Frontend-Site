@@ -1,167 +1,131 @@
-.cardWrapper{
+.cardWrapper {
     position: relative;
 
-    &:hover{
+    &:hover {
         cursor: pointer;
     }
- 
 }
 
-
-
-
 .card {
-    // Section 1: Dimensions
     width: 372px;
-
-    // Section 2: Padding
+    height: 350px;
     padding: 0 30px;
     padding-top: 22px;
     padding-bottom: 26px;
-
-    // Section 3: Styling
     background-color: #101010;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
     border-radius: 22px;
+    transition: all .8s ease-in-out;
+    display: flex;
+    flex-direction: column;
 
-    // On hover increase card width
-    transition: all .8s ease-in-out; // adjust timing to your needs
-    &:hover {
-
-    // Background color, gradient
-    background: #1f1f1f;
-
-    // transform: scale(1.05);
- 
-
-    z-index: 5;
-    // Border when hovered
-    border: 1px solid #01DDD9;
-    // If the card is a top article, change border color a gold gradient
-    &.topArticle{
-        // Gold linear gradient border
-        border:2px solid #fff
+    .newsHeader,
+    .content,
+    .date {
+        padding: 0 10px;
     }
 
-    // change color of date
-    .date{
-        transition: all 1.3s ease-in-out; // adjust timing to your needs
-        color: #fff;
+    .content {
+        font-family: "Poppins";
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #A9A9A9;
+        flex: 0 0 auto;
+    }
+
+    .date {
+        font-weight: 500;
+        color: #888;
+        font-family: Poppins;
+        font-size: 11px;
+        margin: 0.8rem 0;
+
+        &.topArticle {
+            color: #fff;
         }
-
-    .image{
-        max-height: 145px;
-        opacity: 1;
-    }
     }
 
-    
    
+    &:hover {
+        background: #1f1f1f;
+        border: 1px solid #01DDD9;
+        z-index: 5;
+        padding-left: 20px;
+        padding-right: 20px;
 
 
-    &.topArticle{
-        background: linear-gradient(180deg, #01DDD9 0%, #017EF0 100%);
+        &.topArticle {
+            border: 2px solid #fff;
+        }
+
+        .date {
+            transition: all 1.3s ease-in-out;
+            color: #fff;
+        }
+
+        .image {
+            opacity: 1;
+            width: 120%;
+            // overflow: revert !important;
+        }
     }
 
-    // Change .content class color to white
     &.topArticle {
-        .content{
+        background: linear-gradient(180deg, #01DDD9 0%, #017EF0 100%);
+
+        .content,
+        .date {
             color: #fff;
         }
-        .date{
-            color: #fff;
-        }
-        .image{
+
+        .image {
             opacity: 1;
         }
-      
-        // margin-top: 41px;
     }
-    
+
     position: relative;
     z-index: 2;
 }
 
-
-
-.newsHeader{
-    font-Family: Poppins;
-    font-Size: 24px;
-    font-Weight: 700;
-
-    
+.newsHeader {
+    font-family: Poppins;
+    font-size: 24px;
+    font-weight: 700;
 }
 
-
-
-.content{
-    font-Family: "Poppins";
-    font-size: 0.75rem;
-    font-Weight: 500;
-    color: #A9A9A9;
-
-   
-}
-
-.date{
-    font-Weight: 500;
-    color:#888;
-    font-Family: Poppins;
-    font-Size: 11px;
-
-    // Margin
-    margin:.8rem 0;
-
-    &.topArticle{
-        color: #fff;
-    }
-}
-
-.image{
-    margin-top: 1rem;
-    max-width: 19.56rem;
-    border-radius: 8.67px;
-    width: 313px;
-    max-height:  123px;
-    // Prevent stretching of image
+.image {
+    flex: 1 1 auto;
+    // max-height: 100%;
+    margin-top: .5rem;
+    border-radius: 15px;
+    overflow: auto;
     object-fit: cover;
-    transition: all .8s ease-in-out; // adjust timing to your needs
+    width: 100%;
+    transition: all .8s ease-in-out;
     opacity: .8;
-
-    // Unless its the top article
- 
+    // margin-bottom: 1rem;
 }
 
-
-// Top Article Subcard
-.topArticleCard{
+.topArticleCard {
     width: 353px;
     height: 107px;
     border-radius: 22px;
     background: #31363F;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);   
-
-    //Behind main card
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
     position: absolute;
     z-index: 1;
-    top:-41px;
-
-
-    // Align in middle
+    top: -41px;
     left: 50%;
     transform: translateX(-50%);
-
 }
 
-.topArticleText{
+.topArticleText {
     color: #CECECE;
     font-family: Poppins;
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: 24px;
-
-    // Align in middle
-    margin-top:11px;
+    margin-top: 11px;
     margin-left: 29px;
 }
