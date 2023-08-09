@@ -44,6 +44,7 @@ export default function NewsContent() {
                     setLoading(false);
                 } else {
                     console.log('Error fetching recommendations:', response?.status);
+                    setRecommendedNews([]);
                 }
             } catch (error) {
                 console.log('Error:', error);
