@@ -33,7 +33,7 @@ export default function Login() {
 
         console.log('Response Data:', data);
         console.log('Response Code:', response?.status);
-        console.log('interests:', interests);
+        // console.log('interests:', interests);
 
         if (response?.status === 200 || response?.status === 201) {
             // Account created successfully

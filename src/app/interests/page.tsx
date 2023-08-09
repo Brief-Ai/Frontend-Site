@@ -141,10 +141,14 @@ export default function Interests() {
             <style jsx global>
                 {`body {background-image: url("/images/backgroundStars.png");}`}
             </style>
+
             <motion.div
                 className={styles.mainCard}
                 variants={cardVariants} // Use cardVariants for the card animation
             >
+                <div className={styles.titleCard}>
+                    <h1 className={styles.title}>Interests</h1>
+                </div>
                 <div className={styles.contentWrapper}>
 
                     <motion.div className={styles.formItem} variants={inputVariants}>

@@ -126,11 +126,14 @@ export async function refreshToken(refreshToken: string) {
 
 //Get recommendations for news articles
 export async function getRecommendations() {
+  const accessTokenCookie = await getAccessTokenFromCookie();
+
   console.log(`Api == Attempting to get recommendations...`);
   let response = await rawApiCall(`${backendApiUrl}/news/recommended/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessTokenCookie}`,
     },
   });
   return response;
