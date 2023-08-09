@@ -65,6 +65,7 @@ export async function createAccount(
   password2: string
 ) {
   console.log(`Api == Attempting to create user: ${username}`);
+  console.log(`Got api url: ${backendApiUrl} from .env file`);
   let response = await rawApiCall(`${backendApiUrl}/account/register/`, {
     method: "POST",
     headers: {
