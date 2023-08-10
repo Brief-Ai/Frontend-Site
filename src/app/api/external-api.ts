@@ -95,17 +95,14 @@ export async function login(username: string, password: string) {
   return response;
 }
 
-export async function validateToken() {
-  const accessTokenCookie = await getAccessTokenFromCookie();
-
-  // console.log(`External API == Received token: ${accessTokenCookie}`);
+export async function validateToken(accessToken: string) {
   // Take in a access token and return true if it is valid, false otherwise
   console.log(`Api == Attempting to validate access token...`);
   let response = await rawApiCall(`${backendApiUrl}/account/validate_token/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessTokenCookie}`,
+      Authorization: `${accessToken}`,
     },
   });
   return response;

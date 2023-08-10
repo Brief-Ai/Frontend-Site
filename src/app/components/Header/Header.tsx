@@ -57,12 +57,9 @@ export default function Header() {
                     return
                 }
 
-                // Validate the access token
-                console.log('Validating token...');
-                // console.log('Access token 2.5 :', accessToken);
-                const validTokenResponse = await validateToken();
+
+                const validTokenResponse = await validateToken(accessToken);
                 if (validTokenResponse?.status === 200) {
-                    console.log('Token is valid');
                     // User is logged in
                     // console.log(`User is logged in while on page ${pathName}`);
                     // If current page is login page, redirect to the home page
