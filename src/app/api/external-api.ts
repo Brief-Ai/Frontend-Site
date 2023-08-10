@@ -102,7 +102,22 @@ export async function validateToken(accessToken: string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `${accessToken}`,
+    },
+  });
+  return response;
+}
+
+//Get recommendations for news articles
+export async function getRecommendations() {
+  const accessTokenCookie = await getAccessTokenFromCookie();
+
+  console.log(`Api == Attempting to get recommendations...`);
+  let response = await rawApiCall(`${backendApiUrl}/news/recommended/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessTokenCookie}`,
     },
   });
   return response;
@@ -121,21 +136,6 @@ export async function refreshToken(refreshToken: string) {
     body: JSON.stringify({
       token: `${refreshToken}`,
     }),
-  });
-  return response;
-}
-
-//Get recommendations for news articles
-export async function getRecommendations() {
-  const accessTokenCookie = await getAccessTokenFromCookie();
-
-  console.log(`Api == Attempting to get recommendations...`);
-  let response = await rawApiCall(`${backendApiUrl}/news/recommended/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessTokenCookie}`,
-    },
   });
   return response;
 }
